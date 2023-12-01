@@ -24,7 +24,7 @@
 | :------------: | :----------------: | :------------: | :----------------------: | :--------------------------------: |
 |    ![react]    |       ![ts]        |    ![node]     |          ![sc]           | ![zustand](/images/stack/bear.jpg) |
 
-| Spring Boot(v3.1.1) | MySQL(v8.1) | Elastic search(v) |
+| Spring Boot(v3.1.1) | MySQL(v8.0) | Elastic search(v) |
 | :-----------------: | :---------: | :---------------: |
 |      ![spring]      |  ![mysql]   |    ![elastic]     |
 
