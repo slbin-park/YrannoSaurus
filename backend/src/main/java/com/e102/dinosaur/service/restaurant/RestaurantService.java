@@ -11,6 +11,7 @@ import com.e102.dinosaur.service.restaurant.response.AbstractRestaurantResponse;
 import com.e102.dinosaur.service.restaurant.response.RestaurantDetailResponse;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,8 +26,16 @@ public class RestaurantService {
     private final EntityManager entityManager;
 
     public List<AbstractRestaurantResponse> findRestaurant(int category) {
-        return restaurantRepository.findRestaurantByCategoryOrderByScoreDesc(category).stream()
-                .map(AbstractRestaurantResponse::of)
+        QRestaurant qRestaurant = QRestaurant.restaurant;
+        QHashTag qHashTag = QHashTag.hashTag;
+        QReview qReview = QReview.review;
+        JPAQuery<Restaurant> query = new JPAQuery<>(entityManager);
+        List<Restaurant> restaurantList = query.select(qRestaurant)
+                .from(qRestaurant)
+                .join(qRestaurant.reviews, qReview).fetchJoin()
+                .where(qRestaurant.category.eq(category))
+                .fetch();
+        return restaurantList.stream().map(AbstractRestaurantResponse::of)
                 .toList();
     }
 
@@ -36,15 +45,11 @@ public class RestaurantService {
         );
     }
 
+
     public List<AbstractRestaurantResponse> findRestaurantByHashTag(String hashTag) {
-        System.out.println("asdfasdf");
         JPAQuery<Restaurant> query = new JPAQuery<>(entityManager);
-//        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
-        log.info(hashTag);
         QRestaurant qRestaurant = QRestaurant.restaurant;
         QHashTag qHashTag = QHashTag.hashTag;
-        QMenu qMenu = QMenu.menu;
-        QReview qReview = QReview.review;
         List<Restaurant> restaurantList = query.select(qRestaurant)
                 .from(qRestaurant)
                 .join(qRestaurant.hashTags, qHashTag).fetchJoin()

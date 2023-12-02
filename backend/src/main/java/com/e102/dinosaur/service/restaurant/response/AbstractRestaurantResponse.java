@@ -20,9 +20,10 @@ public class AbstractRestaurantResponse {
     private String address;
     private String imgAddress;
     private List<HashTagResponse> hashTagList;
+    private List<ReviewResponse> reviewResponseList;
 
     @Builder
-    public AbstractRestaurantResponse(Long id, String storeName, int category, double rating, int ratingCnt, double score, String address, String imgAddress, List<HashTagResponse> hashTagList) {
+    public AbstractRestaurantResponse(Long id, String storeName, int category, double rating, int ratingCnt, double score, String address, String imgAddress, List<HashTagResponse> hashTagList,List<ReviewResponse> reviewResponseList) {
         this.id = id;
         this.storeName = storeName;
         this.category = category;
@@ -32,6 +33,7 @@ public class AbstractRestaurantResponse {
         this.address = address;
         this.imgAddress = imgAddress;
         this.hashTagList = hashTagList;
+        this.reviewResponseList = reviewResponseList;
     }
 
     public static AbstractRestaurantResponse of(Restaurant restaurant) {
@@ -45,6 +47,7 @@ public class AbstractRestaurantResponse {
                 .address(restaurant.getAddress())
                 .imgAddress(restaurant.getImgAddress())
                 .hashTagList(restaurant.getHashTags().stream().map(HashTagResponse::of).toList())
+                .reviewResponseList(restaurant.getReviews().stream().map(ReviewResponse::of).toList())
                 .build();
     }
 }
